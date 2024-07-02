@@ -39,6 +39,7 @@ void checkSeason(int Y, int M, int D) {
         else if (M >= 9 && M <= 11) cout << "Fall";
         else cout << "Winter";
     }
+    else cout << -1;
 }
 
 int main() {

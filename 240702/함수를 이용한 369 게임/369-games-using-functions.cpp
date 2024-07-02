@@ -5,7 +5,7 @@ int a, b, cnt;
 
 bool existThree(int n) {
     while(n > 0) {
-        if ((n % 10) % 3 == 0) {
+        if (n % 10 == 3 || n % 10 == 6 || n % 10 == 9) {
             return true;
         }
         n /= 10;

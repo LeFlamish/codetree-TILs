@@ -1,8 +1,9 @@
 #include <iostream>
 #include <algorithm>
+#include <climits> // for INT_MIN
 using namespace std;
 
-int N, arr[1001], ret;
+int N, arr[1001], ret = INT_MIN;
 
 int main() {
     cin.tie(0)->sync_with_stdio(0);

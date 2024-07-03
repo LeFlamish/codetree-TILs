@@ -8,9 +8,14 @@ int GCD(int a, int b) {
     return GCD(b, a % b);
 }
 
-int LCM(int n) {
-    if (n == 2) return (arr[n-1] / GCD(arr[n-1], arr[n-2])) * arr[n-2];
-    return (arr[n - 1] / GCD(arr[n - 1], LCM(n-1))) * LCM(n-1);
+int LCM(int a, int b) {
+    return (a / GCD(a, b)) * b;
+}
+
+int LCMarr(int n) {
+    if (n == 0) return arr[n];
+
+    return LCM(LCMarr(n - 1), arr[n - 1]);
 }
 
 int main() {
@@ -19,6 +24,6 @@ int main() {
     for (int i = 0; i < N; i++) {
         cin >> arr[i];
     }
-    cout << LCM(N);
+    cout << LCMarr(N);
     return 0;
 }

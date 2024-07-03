@@ -12,7 +12,7 @@ int main() {
     }
     sort(arr, arr + 2 * N);
     for (int i = 0; i < N; i++) {
-        ret = max(ret, arr[i] + arr[2*N - 1 - i]);
+        ret = max(ret, arr[i] + arr[2 * N - 1 - i]);
     }
     cout << ret;
     return 0;

@@ -14,7 +14,7 @@ int main() {
     }
     x = psum[m1-1] + d1;
     y = psum[m2-1] + d2;
-    gap = y - x;
+    gap = y - x + 1;
     cnt++;
     if (target == "Tue") gap -= 1;
     else if (target == "Wed") gap -= 2;

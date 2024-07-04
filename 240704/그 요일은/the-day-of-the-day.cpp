@@ -14,14 +14,31 @@ int main() {
     }
     x = psum[m1-1] + d1;
     y = psum[m2-1] + d2;
-    gap = y - x + 1;
-    cnt++;
-    if (target == "Tue") gap -= 1;
-    else if (target == "Wed") gap -= 2;
-    else if (target == "Thu") gap -= 3;
-    else if (target == "Fri") gap -= 4;
-    else if (target == "Sat") gap -= 5;
-    else if (target == "Sun") gap -= 6;
+    gap = y - x;
+    if (target == "Tue") {
+        if (gap > 1) cnt++;
+        gap -= 1;
+    }
+    else if (target == "Wed") {
+        if (gap > 2) cnt++;
+        gap -= 2;
+    }
+    else if (target == "Thu") {
+        if (gap > 3) cnt++;
+        gap -= 3;
+    }
+    else if (target == "Fri") {
+        if (gap > 4) cnt++;
+        gap -= 4;
+    }
+    else if (target == "Sat") {
+        if (gap > 5) cnt++;
+        gap -= 5;
+    }
+    else if (target == "Sun") {
+        if (gap > 6) cnt++;
+        gap -= 6;
+    }
     cnt += gap / 7;
     cout << cnt;
     return 0;

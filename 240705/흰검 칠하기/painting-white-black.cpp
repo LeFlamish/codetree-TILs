@@ -13,14 +13,14 @@ int main() {
 		if (y == 'R') {
 			nxt = cur + x - 1;
 			for (int i = cur; i <= nxt; i++) {
-				arr[i]++;
+				if (color[i] != 'B') arr[i]++;
 				color[i] = 'B';
 			}
 		}
 		else {
 			nxt = cur - x + 1;
 			for (int i = cur; i >= nxt; i--) {
-				arr[i]++;
+				if (color[i] != 'W') arr[i]++;
 				color[i] = 'W';
 			}
 		}

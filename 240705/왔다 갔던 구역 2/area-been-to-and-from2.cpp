@@ -12,13 +12,12 @@ int main() {
         if (y == 'R') {
             nxt = cur + x;
             for (int j = cur; j < nxt; j++) arr[j]++;
-            cur = nxt;
         }
         else {
             nxt = cur - x;
-            for (int j = cur; j > nxt; j--) arr[j]++;
-            cur = nxt;
+            for (int j = cur - 1; j >= nxt; j--) arr[j]++;
         }
+        cur = nxt;
     }
     for (int i = 1; i < 2002; i++) {
         if (arr[i] >= 2) cnt++;

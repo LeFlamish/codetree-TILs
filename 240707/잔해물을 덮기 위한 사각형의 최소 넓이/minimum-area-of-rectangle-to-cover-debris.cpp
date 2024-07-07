@@ -2,6 +2,7 @@
 using namespace std;
 const int Offset = 1001;
 int board[2002][2002], a, b, c, d, ret, X1, Y1, X2, Y2;
+bool flag;
 int main() {
     cin.tie(0)->sync_with_stdio(0);
     cin >> a >> b >> c >> d;
@@ -27,10 +28,11 @@ int main() {
                 X2 = max(X2, i);
                 Y1 = min(Y1, j);
                 Y2 = max(Y2, j);
+                flag = true;
             }
         }
     }
-
-    cout << (X2 - X1) * (Y2 - Y1);
+    if (flag) cout << (X2 - X1) * (Y2 - Y1);
+    else cout << 0;
     return 0;
 }

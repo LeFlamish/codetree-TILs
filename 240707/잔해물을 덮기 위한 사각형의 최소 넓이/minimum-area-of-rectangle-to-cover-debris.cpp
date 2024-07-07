@@ -21,8 +21,8 @@ int main() {
             board[i][j] = 0;
         }
     }
-    for (int i = a + Offset; i < c + Offset; i++) {
-        for (int j = b + Offset; j < d + Offset; j++) {
+    for (int i = 0; i < 2002; i++) {
+        for (int j = 0; j < 2002; j++) {
             if (board[i][j] == 1) {
                 X1 = min(X1, i);
                 X2 = max(X2, i);

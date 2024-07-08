@@ -27,6 +27,7 @@ int main() {
         if (Prev != Cur) cnt++;
         Prev = Cur;
     }
-    cout << cnt - 1;
+    if (cnt) cout << cnt - 1;
+    else cout << 0;
     return 0;
 }

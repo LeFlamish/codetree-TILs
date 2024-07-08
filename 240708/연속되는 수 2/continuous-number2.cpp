@@ -14,6 +14,7 @@ int main() {
         }
         Prev = cur;
     }
+    ret = max(ret, cnt);
     cout << ret;
     return 0;
 }

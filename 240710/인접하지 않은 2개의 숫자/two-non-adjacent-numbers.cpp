@@ -10,8 +10,8 @@ int main() {
     for (int i = 0; i < n; i++) {
         for (int j = i + 2; j < n; j++) {
             tmp = arr[i] + arr[j];
+            ret = max(ret, tmp);
         }
-        ret = max(ret, tmp);
     }
     cout << ret;
     return 0;

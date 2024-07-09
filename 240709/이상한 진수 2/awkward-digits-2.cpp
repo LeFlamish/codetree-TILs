@@ -14,7 +14,7 @@ int main() {
         }
     }
     if (!flag) {
-        s[s.size() - 1] = 0;
+        s[s.size() - 1] = '0';
     }
     for (int i = 0; i < s.size(); i++) {
         ret = (s[i] - '0') + 2 * ret;

@@ -18,10 +18,16 @@ int main() {
             hand[P1]++;
             hand[P2]++;
             if (infect[P1]) {
-                if (hand[P1] <= K) infect[P2] = true;
+                if (hand[P1] <= K) {
+                    infect[P2] = true;
+                    hand[P2] = 0;
+                }
             }
             else if (infect[P2]) {
-                if (hand[P2] <= K) infect[P1] = true;
+                if (hand[P2] <= K) {
+                    infect[P1] = true;
+                    hand[P1] = 0;
+                }
             }
         }
     }

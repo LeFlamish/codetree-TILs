@@ -11,10 +11,13 @@ int main() {
         }
     }
     for (int i = 0; i < N; i++) {
-        for (int j = i + 1; j < N; j++) {
+        for (int j = 0; j < N; j++) {
             for (int a = 0; a < N - 2; a++) {
                 for (int b = 0; b < N - 2; b++) {
-                    ret = max(board[i][a] + board[i][a + 1] + board[i][a + 2] + board[j][b] + board[j][b + 1] + board[j][b + 2], ret);
+                    if (i != j) ret = max(board[i][a] + board[i][a + 1] + board[i][a + 2] + board[j][b] + board[j][b + 1] + board[j][b + 2], ret);
+                    else {
+                        if (abs(a - b) > 2) ret = max(board[i][a] + board[i][a + 1] + board[i][a + 2] + board[j][b] + board[j][b + 1] + board[j][b + 2], ret);
+                    }
                 }
             }
         }

@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 int ability[5], mx, mn, First, Second, Third, sum, ret = INT_MAX;
-bool visited[5];
+bool visited[5], flag;
 int main() {
     cin.tie(0)->sync_with_stdio(0);
     for (int i = 0; i < 5; i++) {
@@ -23,6 +23,7 @@ int main() {
                             Second = ability[k] + ability[l];
                             Third = sum - First - Second;
                             if (First != Second && Second != Third && Third != First) {
+                                flag = true;
                                 mx = max(max(First, Second), Third);
                                 mn = min(min(First, Second), Third);
                                 ret = min(ret, mx - mn);
@@ -37,6 +38,7 @@ int main() {
         }
         visited[i] = false;
     }
-    cout << ret;
+    if (flag) cout << ret;
+    else cout << -1;
     return 0;
 }

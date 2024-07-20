@@ -19,16 +19,18 @@ int main() {
                     if (!visited[k]) {
                         visited[k] = true;
                         for (int l = 0; l < 5; l++) {
-                            visited[l] = true;
-                            Second = ability[k] + ability[l];
-                            Third = sum - First - Second;
-                            if (First != Second && Second != Third && Third != First) {
-                                flag = true;
-                                mx = max(max(First, Second), Third);
-                                mn = min(min(First, Second), Third);
-                                ret = min(ret, mx - mn);
+                            if (!visited[l]) {
+                                visited[l] = true;
+                                Second = ability[k] + ability[l];
+                                Third = sum - First - Second;
+                                if (First != Second && Second != Third && Third != First) {
+                                    flag = true;
+                                    mx = max(max(First, Second), Third);
+                                    mn = min(min(First, Second), Third);
+                                    ret = min(ret, mx - mn);
+                                }
+                                visited[l] = false;
                             }
-                            visited[l] = false;
                         }
                         visited[k] = false;
                     }

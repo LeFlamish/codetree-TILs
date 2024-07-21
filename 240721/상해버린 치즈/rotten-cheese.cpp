@@ -24,7 +24,7 @@ int main() {
     for (int i = 1; i <= N; i++) {
         if (sick[i]) {
             for (int j = 0; j < record[i].size(); j++) {
-                cheese[record[i][j].what]++;
+                if (record[i][j].when < sick[i]) cheese[record[i][j].what]++;
             }
         }
     }
@@ -35,7 +35,10 @@ int main() {
         int cnt = 0;
         for (int p = 1; p <= N; p++) {
             for (int t = 0; t < record[p].size(); t++) {
-                if (record[p][t].what == problem[i]) cnt++;
+                if (record[p][t].what == problem[i]) {
+                    cnt++;
+                    break;
+                }
             }
         }
         ret = max(cnt, ret);

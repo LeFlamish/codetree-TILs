@@ -7,6 +7,7 @@ int N, M, D, S, ret;
 vector<P> record[51];
 vector<int> problem;
 int sick[51], cheese[51];
+bool visited[51];
 
 int main() {
     cin.tie(0)->sync_with_stdio(0);
@@ -22,9 +23,13 @@ int main() {
         sick[p] = t;
     }
     for (int i = 1; i <= N; i++) {
+        memset(visited, false, sizeof(visited));
         if (sick[i]) {
             for (int j = 0; j < record[i].size(); j++) {
-                if (record[i][j].when < sick[i]) cheese[record[i][j].what]++;
+                if (record[i][j].when < sick[i] && !visited[record[i][j].what]) {
+                    visited[record[i][j].what] = true;
+                    cheese[record[i][j].what]++;
+                }
             }
         }
     }

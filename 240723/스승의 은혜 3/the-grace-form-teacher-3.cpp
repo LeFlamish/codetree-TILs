@@ -7,10 +7,7 @@ int N, B, ret, total, cnt;
 vector<P> V;
 
 bool compare(const P& x, const P& y) {
-    if (x.present + x.deli == y.present + y.deli) {
-        if (x.present == y.present) return x.deli < y.deli;
-        return x.present < y.present;
-    }
+    if (x.present + x.deli == y.present + y.deli) return x.present < y.present;
     return x.present + x.deli < y.present + y.deli;
 }
 
@@ -26,15 +23,15 @@ int main() {
     for (int i = 0; i < N; i++) {
         total = 0;
         cnt = 0;
-        for (int j = 0; j <= i; j++) {
+        for (int j = 0; j < N; j++) {
             int tmp;
             if (i == j) tmp = V[j].present / 2 + V[j].deli;
             else tmp = V[j].present + V[j].deli;
 
             total += tmp;
-            cnt++;
+            if (total > B) total -= tmp;
+            else cnt++;
         }
-        if (total > B) break;
         ret = max(ret, cnt);
     }
     cout << ret;

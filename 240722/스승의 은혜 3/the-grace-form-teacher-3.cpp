@@ -23,15 +23,15 @@ int main() {
     for (int i = 0; i < N; i++) {
         total = 0;
         cnt = 0;
-        for (int j = 0; j < N; j++) {
+        for (int j = 0; j <= i; j++) {
             int tmp;
             if (i == j) tmp = V[j].present / 2 + V[j].deli;
             else tmp = V[j].present + V[j].deli;
 
             total += tmp;
-            if (total > B) break;
-            else cnt++;
+            cnt++;
         }
+        if (total > B) break;
         ret = max(ret, cnt);
     }
     cout << ret;

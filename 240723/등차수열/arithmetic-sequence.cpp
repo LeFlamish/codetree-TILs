@@ -12,7 +12,7 @@ int main() {
             int from = min(arr[i], arr[j]);
             int to = max(arr[i], arr[j]);
             for (int k = from; k <= to; k++) {
-                if (abs(arr[i] - k) == abs(arr[j] - k)) ret++;
+                if (to - k == k - from) ret++;
             }
         }
     }

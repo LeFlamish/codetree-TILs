@@ -20,6 +20,7 @@ int main() {
             if (bomb[stand + dist] == num) ret = max(ret, num);
         }
     }
-    cout << ret;
+    if (ret == 0) cout << -1;
+    else cout << ret;
     return 0;
 }

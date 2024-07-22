@@ -17,11 +17,9 @@ int main() {
             if (position[j] == 'S') d1 = min(d1, abs(i - j));
         }
         for (int j = 1; j < 1001; j++) {
-            if (position[j] == 'N') {
-                d2 = min(d2, abs(i - j));
-                if (d1 <= d2) ret++;
-            }
+            if (position[j] == 'N') d2 = min(d2, abs(i - j));
         }
+        if (d1 <= d2) ret++;
     }
     cout << ret;
     return 0;

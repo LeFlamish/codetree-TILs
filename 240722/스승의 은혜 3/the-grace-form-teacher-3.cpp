@@ -5,6 +5,12 @@ typedef pair<int, int> P;
 #define deli second
 int N, B, ret, total, cnt;
 vector<P> V;
+
+bool compare(const P& x, const P& y) {
+    if (x.present == y.present) return x.deli < y.deli;
+    return x.present < y.present;
+}
+
 int main() {
     cin.tie(0)->sync_with_stdio(0);
     cin >> N >> B;
@@ -13,6 +19,7 @@ int main() {
         cin >> x >> y;
         V.push_back({ x, y });
     }
+    sort(V.begin(), V.end(), compare);
     for (int i = 0; i < N; i++) {
         total = 0;
         cnt = 0;
@@ -22,7 +29,7 @@ int main() {
             else tmp = V[j].present + V[j].deli;
 
             total += tmp;
-            if (total > B) total -= tmp;
+            if (total > B) break;
             else cnt++;
         }
         ret = max(ret, cnt);

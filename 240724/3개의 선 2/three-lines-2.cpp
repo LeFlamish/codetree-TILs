@@ -49,7 +49,7 @@ int main() {
         for (int j = i + 1; j < line.size(); j++) {
             for (int k = j + 1; k < line.size(); k++) {
                 vector<Info> tmp = { line[i], line[j], line[k] };
-                if (canCover) {
+                if (canCover(tmp)) {
                     cout << 1;
                     return 0;
                 }

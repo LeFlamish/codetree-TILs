@@ -28,13 +28,14 @@ bool canCoverAllPoints(const vector<pair<int, int>>& points) {
                     for (int y2 = y1; y2 < m; ++y2) {
                         for (int y3 = y2; y3 < m; ++y3) {
                             set<pair<int, int>> covered_points;
-                            // x = x_vec[x1]
+                            // 커버할 수 있는 점들을 수집
                             for (const auto& point : points) {
                                 if (point.first == x_vec[x1] || point.first == x_vec[x2] || point.first == x_vec[x3] ||
                                     point.second == y_vec[y1] || point.second == y_vec[y2] || point.second == y_vec[y3]) {
                                     covered_points.insert(point);
                                 }
                             }
+                            // 모든 점을 커버하는지 확인
                             if (covered_points.size() == points.size()) {
                                 return true;
                             }

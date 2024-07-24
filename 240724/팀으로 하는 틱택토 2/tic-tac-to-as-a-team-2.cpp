@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 int N, board[3][3], visited[10], ret;
+bool team[10][10];
 
 bool checkHorizontal(int start) {
     memset(visited, 0, sizeof(visited));
@@ -9,11 +10,17 @@ bool checkHorizontal(int start) {
         visited[board[start][i]]++;
     }
     for (int i = 1; i <= 9; i++) {
-        if (visited[i] == 2) a++;
-        if (visited[i] == 1) b++;
+        if (visited[i] == 2) a = i;
+        if (visited[i] == 1) b = i;
     }
-    if (a == 1 && b == 1) return true;
-    else return false;
+    if (a && b) {
+        if (!team[a][b] && !team[b][a]) {
+            team[a][b] = true;
+            team[b][a] = true;
+            return true;
+        }
+    }
+    return false;
 }
 
 bool checkVertical(int start) {
@@ -23,11 +30,17 @@ bool checkVertical(int start) {
         visited[board[i][start]]++;
     }
     for (int i = 1; i <= 9; i++) {
-        if (visited[i] == 2) a++;
-        if (visited[i] == 1) b++;
+        if (visited[i] == 2) a = i;
+        if (visited[i] == 1) b = i;
     }
-    if (a == 1 && b == 1) return true;
-    else return false;
+    if (a && b) {
+        if (!team[a][b] && !team[b][a]) {
+            team[a][b] = true;
+            team[b][a] = true;
+            return true;
+        }
+    }
+    return false;
 }
 
 bool checkDiagonal1() {
@@ -37,11 +50,17 @@ bool checkDiagonal1() {
         visited[board[i][i]]++;
     }
     for (int i = 1; i <= 9; i++) {
-        if (visited[i] == 2) a++;
-        if (visited[i] == 1) b++;
+        if (visited[i] == 2) a = i;
+        if (visited[i] == 1) b = i;
     }
-    if (a == 1 && b == 1) return true;
-    else return false;
+    if (a && b) {
+        if (!team[a][b] && !team[b][a]) {
+            team[a][b] = true;
+            team[b][a] = true;
+            return true;
+        }
+    }
+    return false;
 }
 
 bool checkDiagonal2() {
@@ -51,11 +70,17 @@ bool checkDiagonal2() {
         visited[board[i][2 - i]]++;
     }
     for (int i = 1; i <= 9; i++) {
-        if (visited[i] == 2) a++;
-        if (visited[i] == 1) b++;
+        if (visited[i] == 2) a = i;
+        if (visited[i] == 1) b = i;
     }
-    if (a == 1 && b == 1) return true;
-    else return false;
+    if (a && b) {
+        if (!team[a][b] && !team[b][a]) {
+            team[a][b] = true;
+            team[b][a] = true;
+            return true;
+        }
+    }
+    return false;
 }
 
 int main() {

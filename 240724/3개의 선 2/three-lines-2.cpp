@@ -1,68 +1,61 @@
-#include <iostream>
-#include <vector>
-#include <set>
-#include <algorithm>
-#include <iterator>
-
+#include <bits/stdc++.h>
 using namespace std;
+typedef pair<int, int> P;
+typedef pair<char, int> Info;
+#define X first
+#define Y second
+int N;
+vector<P> points;
+vector<Info> line;
+set<int> x_coord;
+set<int> y_coord;
+bool visited[20];
 
-// 함수 정의: 주어진 좌표들을 x축 또는 y축에 평행한 직선 3개로 커버할 수 있는지 확인
-bool canCoverAllPoints(const vector<pair<int, int>>& points) {
-    set<int> x_coords, y_coords;
-    for (const auto& point : points) {
-        x_coords.insert(point.first);
-        y_coords.insert(point.second);
+bool canCover(vector<Info>& tmp) {
+    memset(visited, false, sizeof(visited));
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < N; j++) {
+            if (tmp[i].first == 'x') {
+                if (points[j].X == tmp[i].second) visited[j] = true;
+            }
+            if (tmp[i].first == 'y') {
+                if (points[j].Y == tmp[i].second) visited[j] = true;
+            }
+        }
     }
+    for (int i = 0; i < N; i++) {
+        if (!visited[i]) return false;
+    }
+    return true;
+}
 
-    vector<int> x_vec(x_coords.begin(), x_coords.end());
-    vector<int> y_vec(y_coords.begin(), y_coords.end());
-
-    int n = x_vec.size();
-    int m = y_vec.size();
-
-    // 최대 3개의 직선 조합을 사용해 모든 점을 커버할 수 있는지 확인
-    for (int x1 = 0; x1 < n; ++x1) {
-        for (int x2 = x1; x2 < n; ++x2) {
-            for (int x3 = x2; x3 < n; ++x3) {
-                for (int y1 = 0; y1 < m; ++y1) {
-                    for (int y2 = y1; y2 < m; ++y2) {
-                        for (int y3 = y2; y3 < m; ++y3) {
-                            set<pair<int, int>> covered_points;
-                            // 커버할 수 있는 점들을 수집
-                            for (const auto& point : points) {
-                                if (point.first == x_vec[x1] || point.first == x_vec[x2] || point.first == x_vec[x3] ||
-                                    point.second == y_vec[y1] || point.second == y_vec[y2] || point.second == y_vec[y3]) {
-                                    covered_points.insert(point);
-                                }
-                            }
-                            // 모든 점을 커버하는지 확인
-                            if (covered_points.size() == points.size()) {
-                                return true;
-                            }
-                        }
-                    }
+int main() {
+    cin.tie(0)->sync_with_stdio(0);
+    cin >> N;
+    for (int i = 0; i < N; i++) {
+        int x, y;
+        cin >> x >> y;
+        points.push_back({ x, y });
+        x_coord.insert(x);
+        y_coord.insert(y);
+    }
+    for (int i : x_coord) {
+        line.push_back({ 'x', i });
+    }
+    for (int i : y_coord) {
+        line.push_back({ 'y', i });
+    }
+    for (int i = 0; i < line.size(); i++) {
+        for (int j = i + 1; j < line.size(); j++) {
+            for (int k = j + 1; k < line.size(); k++) {
+                vector<Info> tmp = { line[i], line[j], line[k] };
+                if (canCover) {
+                    cout << 1;
+                    return 0;
                 }
             }
         }
     }
-
-    return false;
-}
-
-int main() {
-    int N;
-    cin >> N;
-
-    vector<pair<int, int>> points(N);
-    for (int i = 0; i < N; ++i) {
-        cin >> points[i].first >> points[i].second;
-    }
-
-    if (canCoverAllPoints(points)) {
-        cout << 1 << endl;
-    } else {
-        cout << 0 << endl;
-    }
-
+    cout << 0;
     return 0;
 }

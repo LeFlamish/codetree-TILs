@@ -3,7 +3,7 @@ using namespace std;
 int N, M, arr[101], ret;
 
 int move(int index, int cnt) {
-    if (cnt == 3) return arr[index];
+    if (cnt == M) return arr[index];
     int answer = arr[index];
     return answer + move(arr[index], cnt + 1);
 }

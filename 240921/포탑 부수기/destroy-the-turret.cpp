@@ -12,7 +12,16 @@ int attack[SIZE][SIZE];
 bool visited[SIZE][SIZE];
 bool related[SIZE][SIZE];
 int dx[] = { 1, 0, -1, 0, 1, 1, -1, -1 };
-int dy[] = { 0, 1, 0, 1, -1, 1, 1, -1 };
+int dy[] = { 0, 1, 0, -1, -1, 1, 1, -1 };
+
+void check() {
+    for (int y = 1; y <= N; y++) {
+        for (int x = 1; x <= M; x++) {
+            cout << setw(4) << board[y][x] << ' ';
+        }
+        cout << '\n';
+    }
+}
 
 void init() {
     cin >> N >> M >> K;
@@ -138,11 +147,25 @@ void prepare() {
 void solve(int k) {
     memset(Prev, 0, sizeof(Prev));
     memset(related, false, sizeof(related));
+    //cout << "====================\n<BEFORE>\n";
+    //check();
     CD End = findMax();
     CD Start = findMin();
+    //cout << "--------------------\n";
+    //cout << Start.X << ' ' << Start.Y << " : " << board[Start.Y][Start.X] - N - M << '\n';
+    //cout << End.X << ' ' << End.Y << " : " << board[End.Y][End.X] << '\n';
+    if (canLaser(Start, End)) {
+        //cout << "LASER\n";
+        laserAttack(Start, End);
+    }
+    else {
+        bombAttack(Start, End);
+        //cout << "BOMB\n";
+    }
 
-    if (canLaser(Start, End)) laserAttack(Start, End);
-    else bombAttack(Start, End);
+    //cout << "--------------------\n<AFTER>\n";
+    //check();
+    //cout << "====================\n\n";
     attack[Start.Y][Start.X] = k;
     prepare();
 }

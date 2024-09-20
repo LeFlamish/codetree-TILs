@@ -36,8 +36,11 @@ CD findMin() {
     sort(candidates.begin(), candidates.end(), [](const auto& a, const auto& b) {
         if (a.first != b.first) return a.first < b.first; // 값이 작을수록 우선
         if (attack[a.second.Y][a.second.X] != attack[b.second.Y][b.second.X])
-            return attack[a.second.Y][a.second.X] < attack[b.second.Y][b.second.X]; // 공격 횟수 우선
-        return (a.second.X + a.second.Y) < (b.second.X + b.second.Y); // 좌표 합 우선
+            return attack[a.second.Y][a.second.X] > attack[b.second.Y][b.second.X]; // 공격 횟수 우선
+        int sumA = a.second.Y + a.second.X;
+        int sumB = b.second.Y + b.second.X;
+        if (sumA != sumB) return sumA > sumB; // 행과 열의 합이 큰 것 우선
+        return a.second.X > b.second.X; // 열의 값이 큰 것 우선
         });
 
     CD ret = candidates[0].second;
@@ -58,12 +61,16 @@ CD findMax() {
     sort(candidates.begin(), candidates.end(), [](const auto& a, const auto& b) {
         if (a.first != b.first) return a.first > b.first; // 값이 클수록 우선
         if (attack[a.second.Y][a.second.X] != attack[b.second.Y][b.second.X])
-            return attack[a.second.Y][a.second.X] > attack[b.second.Y][b.second.X]; // 공격 횟수 우선
-        return (a.second.X + a.second.Y) > (b.second.X + b.second.Y); // 좌표 합 우선
+            return attack[a.second.Y][a.second.X] < attack[b.second.Y][b.second.X]; // 공격 횟수 우선
+        int sumA = a.second.Y + a.second.X;
+        int sumB = b.second.Y + b.second.X;
+        if (sumA != sumB) return sumA < sumB; // 행과 열의 합이 작은 것 우선
+        return a.second.X < b.second.X; // 열의 값이 작은 것 우선
         });
 
     return candidates[0].second;
 }
+
 
 bool canLaser(CD Start, CD End) {
     memset(visited, false, sizeof(visited));

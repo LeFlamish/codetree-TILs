@@ -13,6 +13,7 @@ bool visited[SIZE][SIZE];
 bool related[SIZE][SIZE];
 int dx[] = { 1, 0, -1, 0, 1, 1, -1, -1 };
 int dy[] = { 0, 1, 0, -1, -1, 1, 1, -1 };
+vector<pair<int, CD>> candidates;
 
 void check() {
     for (int y = 1; y <= N; y++) {
@@ -33,7 +34,7 @@ void init() {
 }
 
 CD findMin() {
-    vector<pair<int, CD>> candidates;
+    candidates.clear();
     for (int y = 1; y <= N; y++) {
         for (int x = 1; x <= M; x++) {
             if (board[y][x] != 0) {
@@ -58,7 +59,7 @@ CD findMin() {
 }
 
 CD findMax() {
-    vector<pair<int, CD>> candidates;
+    candidates.clear();
     for (int y = 1; y <= N; y++) {
         for (int x = 1; x <= M; x++) {
             if (board[y][x] != 0) {
@@ -78,6 +79,18 @@ CD findMax() {
         });
 
     return candidates[0].second;
+}
+
+int countTowers() {
+    int count = 0;
+    for (int y = 1; y <= N; y++) {
+        for (int x = 1; x <= M; x++) {
+            if (board[y][x] != 0) {
+                count++;
+            }
+        }
+    }
+    return count;
 }
 
 bool canLaser(CD Start, CD End) {
@@ -147,6 +160,7 @@ void prepare() {
 void solve(int k) {
     memset(Prev, 0, sizeof(Prev));
     memset(related, false, sizeof(related));
+    if (countTowers() <= 1) return;
     //cout << "====================\n<BEFORE>\n";
     //check();
     CD End = findMax();

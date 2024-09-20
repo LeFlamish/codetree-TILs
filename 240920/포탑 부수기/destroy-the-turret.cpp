@@ -129,7 +129,7 @@ CD findMax() {
 bool canLaser(CD Start, CD End) {
 	memset(visited, false, sizeof(visited));
 	queue<CD> Q;
-	visited[Start.Y][Start.X];
+	visited[Start.Y][Start.X] = true;
 	Q.push(Start);
 	while (!Q.empty()) {
 		CD cur = Q.front(); Q.pop();
@@ -164,6 +164,7 @@ void bombAttack(CD Start, CD End, int K) {
 		if (ny < 1) ny = N;
 		if (board[ny][nx] == 0) continue;
 		board[ny][nx] -= (board[Start.Y][Start.X]) / 2;
+		if (board[ny][nx] < 0) board[ny][nx] = 0;
 		related[ny][nx] = true;
 		if (board[ny][nx] < 0) board[ny][nx] = 0;
 	}
@@ -180,6 +181,7 @@ void laserAttack(CD Start, CD End, int k) {
 		if (tmp.X == Start.X && tmp.Y == Start.Y) break;
 		board[tmp.Y][tmp.X] -= board[Start.Y][Start.X] / 2;
 		if (board[tmp.Y][tmp.X] < 0) board[tmp.Y][tmp.X] = 0;
+		related[tmp.Y][tmp.X] = true;
 		x = tmp.X;
 		y = tmp.Y;
 	}

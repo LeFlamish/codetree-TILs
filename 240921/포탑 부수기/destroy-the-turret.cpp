@@ -152,6 +152,8 @@ void laserAttack(CD Start, CD End) {
 		int dir = Prev[y][x];
 		int nx = x - dx[dir];
 		int ny = y - dy[dir];
+		if (nx < 1) nx = M; if (nx > M) nx = 1;
+		if (ny < 1) ny = N; if (ny > N) ny = 1;
 		if (nx == Start.X && ny == Start.Y) break;
 		board[ny][nx] = max(0, board[ny][nx] - board[Start.Y][Start.X] / 2);
 		related[ny][nx] = true;

@@ -16,6 +16,17 @@ int dy[] = { 0, 1, 0, -1 };
 int bombdx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int bombdy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
+void check() {
+	cout << "====================\n";
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= M; j++) {
+			cout << board[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+	cout << "====================\n";
+}
+
 void init() {
 	cin >> N >> M >> K;
 	for (int i = 1; i <= N; i++) {
@@ -62,6 +73,7 @@ CD findMin() {
 			}
 		}
 	}
+	board[ret.Y][ret.X] += N + M;
 	return ret;
 }
 
@@ -144,7 +156,7 @@ vector<CD> findRoad(CD Start, CD End) {
 }
 
 void bombAttack(CD Start, CD End, int K) {
-	board[End.Y][End.X] -= board[Start.Y][Start.X] + N + M;
+	board[End.Y][End.X] -= board[Start.Y][Start.X];
 	if (board[End.Y][End.X] < 0) board[End.Y][End.X] = 0;
 	related[Start.Y][Start.X] = true;
 	related[End.Y][End.X] = true;
@@ -156,7 +168,7 @@ void bombAttack(CD Start, CD End, int K) {
 		if (ny > N) ny = 1;
 		if (ny < 1) ny = N;
 		if (board[ny][nx] == 0) continue;
-		board[ny][nx] -= (board[Start.Y][Start.X] + N + M) / 2;
+		board[ny][nx] -= (board[Start.Y][Start.X]) / 2;
 		related[ny][nx] = true;
 		if (board[ny][nx] < 0) board[ny][nx] = 0;
 	}
@@ -168,11 +180,11 @@ void laserAttack(CD Start, CD End, int k) {
 	attack[Start.Y][Start.X] = k;
 	related[Start.Y][Start.X] = true;
 	for (CD xy : road) {
-		board[xy.Y][xy.X] -= (board[Start.Y][Start.X] + N + M) / 2;
+		board[xy.Y][xy.X] -= (board[Start.Y][Start.X]) / 2;
 		related[xy.Y][xy.X] = true;
 		if (board[xy.Y][xy.X] < 0) board[xy.Y][xy.X] = 0;
 	}
-	board[End.Y][End.X] -= board[Start.Y][Start.X] + N + M;
+	board[End.Y][End.X] -= board[Start.Y][Start.X];
 	if (board[End.Y][End.X] < 0) board[End.Y][End.X] = 0;
 	related[End.Y][End.X] = true;
 }
@@ -195,6 +207,7 @@ void solve(int k) {
 	else {
 		bombAttack(Start, End, k);
 	}
+	// check();
 	prepare();
 }
 
@@ -211,7 +224,7 @@ int findAnswer() {
 int main() {
 	cin.tie(0)->sync_with_stdio(0);
 	init();
-	for (int k = 0; k < K; k++) {
+	for (int k = 1; k <= K; k++) {
 		solve(k);
 	}
 	cout << findAnswer();

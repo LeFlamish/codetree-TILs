@@ -18,8 +18,8 @@ int bombdy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
 void check(CD Start, CD End) {
 	cout << "====================\n";
-	cout << Start.X << ' ' << Start.Y << '\n';
-	cout << End.X << ' ' << End.Y << '\n';
+	cout << Start.X << ' ' << Start.Y << " : " << board[Start.Y][Start.X] << '\n';
+	cout << End.X << ' ' << End.Y << " : " << board[End.Y][End.X] << '\n';
 	cout << "====================\n";
 	for (int i = 1; i <= N; i++) {
 		for (int j = 1; j <= M; j++) {
@@ -60,8 +60,8 @@ CD findMin() {
 		if (flag) break;
 	}
 
-	for (int y = 1; y <= M; y++) {
-		for (int x = 1; x <= N; x++) {
+	for (int y = 1; y <= N; y++) {
+		for (int x = 1; x <= M; x++) {
 			if (board[y][x] == 0) continue;
 			if (board[ret.Y][ret.X] > board[y][x]) {
 				ret = { x, y };
@@ -90,8 +90,8 @@ CD findMin() {
 CD findMax() {
 	CD ret = { 1, 1 };
 	bool flag = false;
-	for (int y = 1; y <= M; y++) {
-		for (int x = 1; x <= N; x++) {
+	for (int y = 1; y <= N; y++) {
+		for (int x = 1; x <= M; x++) {
 			if (board[y][x] != 0) {
 				ret = { x, y };
 				flag = true;
@@ -100,6 +100,7 @@ CD findMax() {
 		}
 		if (flag) break;
 	}
+
 	for (int y = 1; y <= M; y++) {
 		for (int x = 1; x <= N; x++) {
 			if (board[y][x] == 0) continue;
@@ -136,7 +137,7 @@ bool canLaser(CD Start, CD End) {
 		for (int dir = 0; dir < 4; dir++) {
 			int nx = cur.X + dx[dir];
 			int ny = cur.Y + dy[dir];
-			if (nx < 1) nx = M;
+			if (nx < 1) nx = M;	
 			if (nx > M) nx = 1;
 			if (ny < 1) ny = N;
 			if (ny > N) ny = 1;
@@ -166,7 +167,6 @@ void bombAttack(CD Start, CD End, int K) {
 		board[ny][nx] -= (board[Start.Y][Start.X]) / 2;
 		if (board[ny][nx] < 0) board[ny][nx] = 0;
 		related[ny][nx] = true;
-		if (board[ny][nx] < 0) board[ny][nx] = 0;
 	}
 	attack[Start.Y][Start.X] = K;
 }
@@ -200,6 +200,12 @@ void prepare() {
 
 void solve(int k) {
 	memset(related, false, sizeof(related));
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= M; j++) {
+			past[i][j] = { 0, 0 };
+		}
+	}
+
 	CD End = findMax();
 	CD Start = findMin();
 	if (canLaser(Start, End)) {
@@ -208,7 +214,7 @@ void solve(int k) {
 	else {
 		bombAttack(Start, End, k);
 	}
-	// check(Start, End);
+	//check(Start, End);
 	prepare();
 }
 

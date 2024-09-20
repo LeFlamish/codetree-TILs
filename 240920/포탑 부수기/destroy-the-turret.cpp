@@ -16,11 +16,21 @@ int dy[] = { 0, 1, 0, -1 };
 int bombdx[] = { 1, 1, 0, -1, -1, -1, 0, 1 };
 int bombdy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
-void check() {
+void check(CD Start, CD End) {
+	cout << "====================\n";
+	cout << Start.X << ' ' << Start.Y << '\n';
+	cout << End.X << ' ' << End.Y << '\n';
 	cout << "====================\n";
 	for (int i = 1; i <= N; i++) {
 		for (int j = 1; j <= M; j++) {
 			cout << board[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+	cout << "====================\n";
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= M; j++) {
+			cout << '(' << past[i][j].X << ", " << past[i][j].Y << ")\t";
 		}
 		cout << '\n';
 	}
@@ -123,7 +133,6 @@ bool canLaser(CD Start, CD End) {
 	Q.push(Start);
 	while (!Q.empty()) {
 		CD cur = Q.front(); Q.pop();
-		if (cur == End) return true;
 		for (int dir = 0; dir < 4; dir++) {
 			int nx = cur.X + dx[dir];
 			int ny = cur.Y + dy[dir];
@@ -134,25 +143,11 @@ bool canLaser(CD Start, CD End) {
 			if (board[ny][nx] == 0 || visited[ny][nx]) continue;
 			visited[ny][nx] = true;
 			past[ny][nx] = { cur.X, cur.Y };
+			if (nx == End.X && ny == End.Y) return true;
 			Q.push({ nx, ny });
 		}
 	}
 	return false;
-}
-
-vector<CD> findRoad(CD Start, CD End) {
-	vector<CD> road;
-	int x = End.X;
-	int y = End.Y;
-	while (1) {	
-		CD tmp = past[y][x];
-		if (tmp.X == Start.X && tmp.Y == Start.Y) break;
-		road.push_back(past[y][x]);
-		x = tmp.X;
-		y = tmp.Y;
-	}
-	reverse(road.begin(), road.end());
-	return road;
 }
 
 void bombAttack(CD Start, CD End, int K) {
@@ -176,13 +171,17 @@ void bombAttack(CD Start, CD End, int K) {
 }
 
 void laserAttack(CD Start, CD End, int k) {
-	vector<CD> road = findRoad(Start, End);
 	attack[Start.Y][Start.X] = k;
 	related[Start.Y][Start.X] = true;
-	for (CD xy : road) {
-		board[xy.Y][xy.X] -= (board[Start.Y][Start.X]) / 2;
-		related[xy.Y][xy.X] = true;
-		if (board[xy.Y][xy.X] < 0) board[xy.Y][xy.X] = 0;
+	int x = End.X;
+	int y = End.Y;
+	while (1) {
+		CD tmp = past[y][x];
+		if (tmp.X == Start.X && tmp.Y == Start.Y) break;
+		board[tmp.Y][tmp.X] -= board[Start.Y][Start.X] / 2;
+		if (board[tmp.Y][tmp.X] < 0) board[tmp.Y][tmp.X] = 0;
+		x = tmp.X;
+		y = tmp.Y;
 	}
 	board[End.Y][End.X] -= board[Start.Y][Start.X];
 	if (board[End.Y][End.X] < 0) board[End.Y][End.X] = 0;
@@ -199,15 +198,15 @@ void prepare() {
 
 void solve(int k) {
 	memset(related, false, sizeof(related));
-	CD Start = findMin();
 	CD End = findMax();
+	CD Start = findMin();
 	if (canLaser(Start, End)) {
 		laserAttack(Start, End, k);
 	}
 	else {
 		bombAttack(Start, End, k);
 	}
-	// check();
+	// check(Start, End);
 	prepare();
 }
 

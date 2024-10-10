@@ -89,34 +89,22 @@ bool interaction(int Num, int nx, int ny, int dir) {
 	}
 	knight[knightNum].x += dx[dir];
 	knight[knightNum].y += dy[dir];
-	if (board[1][knight[knightNum].y][knight[knightNum].x] > 0 && board[1][knight[knightNum].y][knight[knightNum].x] != knightNum) {
-		knight[knightNum].x -= dx[dir];
-		knight[knightNum].y -= dy[dir];
+	int damage = 0;
+	for (int y = 0; y < knight[knightNum].h; y++) {
+		for (int x = 0; x < knight[knightNum].w; x++) {
+			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = knightNum;
+			if (board[0][knight[knightNum].y + y][knight[knightNum].x + x] == 1) damage++;
+		}
+	}
+	knight[knightNum].k -= damage;
+	if (knight[knightNum].k <= 0) {
 		for (int y = 0; y < knight[knightNum].h; y++) {
 			for (int x = 0; x < knight[knightNum].w; x++) {
 				board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
 			}
 		}
-		return false;
 	}
-	else {
-		int damage = 0;
-		for (int y = 0; y < knight[knightNum].h; y++) {
-			for (int x = 0; x < knight[knightNum].w; x++) {
-				board[1][knight[knightNum].y + y][knight[knightNum].x + x] = knightNum;
-				if (board[0][knight[knightNum].y + y][knight[knightNum].x + x] == 1) damage++;
-			}
-		}
-		knight[knightNum].k -= damage;
-		if (knight[knightNum].k <= 0) {
-			for (int y = 0; y < knight[knightNum].h; y++) {
-				for (int x = 0; x < knight[knightNum].w; x++) {
-					board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
-				}
-			}
-		}
-		return true;
-	}
+	return true;
 }
 
 void move(int k) {

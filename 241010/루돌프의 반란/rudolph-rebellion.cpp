@@ -35,6 +35,7 @@ void check(int k) {
 		cout << '\n';
 	}
 	cout << "--------------------\n";
+	cout << "루돌프 : " << '(' << R.X << ", " << R.Y << ")\n";
 	for (int p = 1; p <= P; p++) {
 		cout << p << " : " << S[p].score << '\n';
 		if (S[p].isOut) cout << p << " is Out\n";
@@ -183,8 +184,8 @@ void moveRudolph() {
 }
 
 void moveSanta() {
-	int targetDir = -1;
 	for (int p = 1; p <= P; p++) {
+		int targetDir = -1;
 		if (S[p].isOut || S[p].isStun) continue;
 		int tmp = distance(S[p].X, S[p].Y, R.X, R.Y);
 		for (int dir = 0; dir < 4; dir++) {
@@ -198,6 +199,7 @@ void moveSanta() {
 				tmp = temp;
 			}
 		}
+		if (targetDir == -1) continue;
 		board[S[p].Y][S[p].X] = 0;
 		S[p].X += sx[targetDir];
 		S[p].Y += sy[targetDir];

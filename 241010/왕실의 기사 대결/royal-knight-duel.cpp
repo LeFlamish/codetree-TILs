@@ -68,18 +68,20 @@ bool canMove(int nx, int ny) {
 }
 
 bool interaction(int Num, int nx, int ny, int dir) {
+    bool flag = false;
 	int knightNum = board[1][ny][nx];
 	Knight tmp = knight[knightNum];
 	for (int y = 0; y < tmp.h; y++) {
 		for (int x = 0; x < tmp.w; x++) {
 			int nx = tmp.x + x + dx[dir];
 			int ny = tmp.y + y + dy[dir];
-			if (!canMove(nx, ny)) return false;
+			if (!canMove(nx, ny)) flag = true;
 			if (board[1][ny][nx] > 0 && board[1][ny][nx] != knightNum) {
-				if (!interaction(knightNum, nx, ny, dir)) return false;
+				if (!interaction(knightNum, nx, ny, dir)) flag = true;
 			}
 		}
 	}
+    if (flag) return false;
 	for (int y = 0; y < knight[knightNum].h; y++) {
 		for (int x = 0; x < knight[knightNum].w; x++) {
 			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
@@ -118,6 +120,7 @@ bool interaction(int Num, int nx, int ny, int dir) {
 }
 
 void move(int k) {
+    bool flag = false;
 	int knightNum = order[k][0];
 	int knightDir = order[k][1];
 	Knight tmp = knight[knightNum];
@@ -125,12 +128,13 @@ void move(int k) {
 		for (int x = 0; x < tmp.w; x++) {
 			int nx = tmp.x + x + dx[knightDir];
 			int ny = tmp.y + y + dy[knightDir];
-			if (!canMove(nx, ny)) return;
+			if (!canMove(nx, ny)) flag = true;
 			if (board[1][ny][nx] > 0 && board[1][ny][nx] != knightNum) {
-				if (!interaction(knightNum, nx, ny, knightDir)) return;
+				if (!interaction(knightNum, nx, ny, knightDir)) flag = true;
 			}
 		}
 	}
+    if (flag) return;
 	for (int y = 0; y < knight[knightNum].h; y++) {
 		for (int x = 0; x < knight[knightNum].w; x++) {
 			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;

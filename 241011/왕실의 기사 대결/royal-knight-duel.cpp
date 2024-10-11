@@ -128,6 +128,7 @@ void solve() {
 	//check(-1);
 	for (int q = 0; q < Q; q++) {
 		memset(visited, false, sizeof(visited));
+		if (knight[order[q][0]].k <= 0) continue;
 		isMove = true;
 		move(q);
 		if (isMove) {

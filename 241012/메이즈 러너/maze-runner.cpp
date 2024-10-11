@@ -19,7 +19,8 @@ int exitX, exitY;
 int board[11][11];
 int dx[] = { 0, 1, 0, -1 };
 int dy[] = { -1, 0, 1, 0 };
-bool isHuman[11][11];
+int isHuman[11][11];
+bool visited[11];
 Human man[11];
 Square S;
 int tmpMap[11][11];
@@ -46,7 +47,7 @@ void check() {
 	cout << "******************** : " << "출구 : " << exitX << ", " << exitY << '\n';
 	cout << "--------------------\n";
 	for (int m = 1; m <= M; m++) {
-		cout << m << "번 사람 : " << man[m].x << ", " << man[m].y << '\n';
+		cout << m << "번 사람 : " << man[m].x << ", " << man[m].y << ' ' << man[m].total << '\n';
 		if (man[m].isOut) cout << m << "번 사람 탈출\n";
 	}
 	cout << "====================\n";
@@ -65,7 +66,7 @@ void init() {
 	}
 	for (int m = 1; m <= M; m++) {
 		cin >> man[m].y >> man[m].x;
-		isHuman[man[m].y][man[m].x] = true;
+		isHuman[man[m].y][man[m].x]++;
 	}
 	cin >> exitY >> exitX;
 	board[exitY][exitX] = -1;
@@ -102,19 +103,21 @@ void setIsHuman() {
 	memset(isHuman, false, sizeof(isHuman));
 	for (int m = 1; m <= M; m++) {
 		if (man[m].isOut) continue;
-		isHuman[man[m].y][man[m].x] = true;
+		isHuman[man[m].y][man[m].x]++;
 	}
 }
 
 void rotation() {
+	memset(visited, false, sizeof(visited));
 	for (int x = 0; x < S.side; x++) {
 		for (int y = 0; y < S.side; y++) {
 			if (board[S.y + S.side - 1 - y][S.x + x] == -1) tmpMap[x][y] = -1;
 			else tmpMap[x][y] = max(board[S.y + S.side - 1 - y][S.x + x] - 1, 0);
 			if (isHuman[S.y + S.side - 1 - y][S.x + x]) {
 				for (int m = 1; m <= M; m++) {
-					if (man[m].x == S.x + x && man[m].y == S.y + S.side - 1 - y) {
-						isHuman[S.y + S.side - 1 - y][S.x + x] = false;
+					if (man[m].x == S.x + x && man[m].y == S.y + S.side - 1 - y && !visited[m]) {
+						visited[m] = true;
+						isHuman[S.y + S.side - 1 - y][S.x + x]--;
 						man[m].x = S.x + y;
 						man[m].y = S.y + x;
 					}
@@ -188,9 +191,9 @@ void moveHuman() {
 void solve(int T) {
 	for (int t = 1; t <= T; t++) {
 		moveHuman();
-		if (exitCnt == M) break;
 		//cout << t << "초 사람 이동 후\n";
 		//check();
+		if (exitCnt == M) break;
 		findSquare();
 		rotation();
 		//cout << t << "초 회전 후\n";

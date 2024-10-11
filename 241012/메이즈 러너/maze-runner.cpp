@@ -72,52 +72,28 @@ void init() {
 }
 
 void findSquare() {
-	int MinD = INT_MAX;
-	int Hx, Hy;
-
-	for (int m = 1; m <= M; m++) {
-		if (man[m].isOut) continue;
-
-		int gapX = abs(man[m].x - exitX);
-		int gapY = abs(man[m].y - exitY);
-		int dist = max(gapX, gapY) + 1;
-		if (MinD > dist) {
-			Hx = man[m].x;
-			Hy = man[m].y;
-			MinD = dist;
-		}
-		else if (MinD == dist) {
-			if (Hy > man[m].y) {
-				Hx = man[m].x;
-				Hy = man[m].y;
-			}
-			else if (Hy == man[m].y) {
-				if (Hx > man[m].x) {
-					Hx = man[m].x;
-					Hy = man[m].y;
+	int size = 2;
+	while(1) {
+		for (int y = 1; y <= N; y++) {
+			for (int x = 1; x <= N; x++) {
+				bool findRunner = false, findExit = false;
+				for (int i = 0; i < size; i++) {
+					for (int j = 0; j < size; j++) {
+						if (exitX == x + j && exitY == y + i) findExit = true;
+						if (isHuman[y + i][x + j]) findRunner = true;
+					}
+				}
+				if (findRunner && findExit) {
+					S.x = x;
+					S.y = y;
+					S.side = size;
+					//cout << "회전 대상 정사각형\n";
+					//cout << "******************** : " << S.x << ' ' << S.y << ' ' << S.side << '\n';
+					return;
 				}
 			}
 		}
-	}
-	
-	for (int y = 1; y <= N; y++) {
-		for (int x = 1; x <= N; x++) {
-			bool findRunner = false, findExit = false;
-			for (int i = 0; i < MinD; i++) {
-				for (int j = 0; j < MinD; j++) {
-					if (exitX == x + j && exitY == y + i) findExit = true;
-					if (Hx == x + j && Hy == y + i) findRunner = true;
-				}
-			}
-			if (findRunner && findExit) {
-				S.x = x;
-				S.y = y;
-				S.side = MinD;
-				//cout << "회전 대상 정사각형\n";
-				//cout << "******************** : " << S.x << ' ' << S.y << ' ' << S.side << '\n';
-				return;
-			}
-		}
+		size++;
 	}
 }
 
@@ -224,6 +200,8 @@ void solve(int T) {
 int main() {
 	cin.tie(0)->sync_with_stdio(0);
 	init();
+	//cout << "시작 전\n";
+	//check();
 	solve(K);
 	for (int m = 1; m <= M; m++) {
 		ret += man[m].total;

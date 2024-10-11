@@ -72,52 +72,41 @@ void init() {
 }
 
 void findSquare() {
-	int dirX = -1, dirY = -1;
 	int MinD = INT_MAX;
-	int Num = 0;
+	int Hx, Hy;
+
 	for (int m = 1; m <= M; m++) {
 		if (man[m].isOut) continue;
-		int gapX = man[m].x - exitX;
-		int gapY = man[m].y - exitY;
-		int dist = max(abs(gapX), abs(gapY));
-		if (gapX <= 0) dirX = -1;
-		else dirX = 1;
-		if (gapY <= 0) dirY = -1;
-		else dirY = 1;
-		if (min(exitX + dirX * dist, exitX) < 1) dirX *= -1;
-		if (min(exitY + dirY * dist, exitY) < 1) dirY *= -1;
+
+		int gapX = abs(man[m].x - exitX);
+		int gapY = abs(man[m].y - exitY);
+		int dist = max(gapX, gapY) + 1;
 		if (MinD > dist) {
-			S.x = min(exitX + dirX * dist, exitX);
-			S.y = min(exitY + dirY * dist, exitY);
-			S.side = dist + 1;
+			Hx = man[m].x;
+			Hy = man[m].y;
 			MinD = dist;
-			Num = m;
 		}
-		else if (MinD == dist) {
-			int tmpX = exitX + dirX * dist;
-			int tmpY = exitY + dirY * dist;
-			if (S.y > tmpY) {
-				S.x = min(tmpX, exitX);
-				S.y = min(tmpY, exitY);
-				Num = m;
-			}
-			else if (S.y == tmpY) {
-				if (S.x > tmpX) {
-					S.x = min(tmpX, exitX);
-					S.y = min(tmpY, exitY);
-					Num = m;
+	}
+	
+	for (int y = 1; y <= N; y++) {
+		for (int x = 1; x <= N; x++) {
+			bool findRunner = false, findExit = false;
+			for (int i = 0; i < MinD; i++) {
+				for (int j = 0; j < MinD; j++) {
+					if (exitX == x + j && exitY == y + i) findExit = true;
+					if (Hx == x + j && Hy == y + i) findRunner = true;
 				}
+			}
+			if (findRunner && findExit) {
+				S.x = x;
+				S.y = y;
+				S.side = MinD;
+				//cout << "회전 대상 정사각형\n";
+				//cout << "******************** : " << S.x << ' ' << S.y << ' ' << S.side << '\n';
+				return;
 			}
 		}
 	}
-	S.x -= S.side - 1 - abs(exitX - man[Num].x);
-	S.y -= S.side - 1 - abs(exitY - man[Num].y);
-	if (S.x < 1) S.x = 1;
-	else if (S.x + S.side - 1 > N) S.x -= S.x + S.side - 1 - N;
-	if (S.y < 1) S.y = 1;
-	else if (S.y + S.side - 1 > N) S.y -= S.y + S.side - 1 - N;
-	//cout << "회전 대상 정사각형\n";
-	//cout << "******************** : " << S.x << ' ' << S.y << ' ' << S.side << '\n';
 }
 
 void setIsHuman() {

@@ -76,7 +76,8 @@ bool canMove(int nx, int ny) {
 	return true;
 }
 
-bool interaction(int nx, int ny, int dir) {
+pair<int, int> interaction(int nx, int ny, int dir) {
+	pair<int, int> O;
 	bool flag = false;
 	int knightNum = board[1][ny][nx];
 	Knight tmp = knight[knightNum];
@@ -86,37 +87,39 @@ bool interaction(int nx, int ny, int dir) {
 			int ny = tmp.y + y + dy[dir];
 			if (!canMove(nx, ny)) flag = true;
 			if (board[1][ny][nx] > 0 && board[1][ny][nx] != knightNum) {
-				if (!interaction(nx, ny, dir)) flag = true;
+				O = interaction(nx, ny, dir);
+				if (O == make_pair(-1, -1)) flag = true;
 			}
 		}
 	}
-	if (flag) return false;
-	for (int y = 0; y < knight[knightNum].h; y++) {
-		for (int x = 0; x < knight[knightNum].w; x++) {
-			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
+	if (flag) return { -1, -1 };
+	for (int y = 0; y < knight[O.first].h; y++) {
+		for (int x = 0; x < knight[O.first].w; x++) {
+			board[1][knight[O.first].y + y][knight[O.first].x + x] = 0;
 		}
 	}
-	knight[knightNum].x += dx[dir];
-	knight[knightNum].y += dy[dir];
+	knight[O.first].x += dx[dir];
+	knight[O.first].y += dy[dir];
 	int damage = 0;
-	for (int y = 0; y < knight[knightNum].h; y++) {
-		for (int x = 0; x < knight[knightNum].w; x++) {
-			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = knightNum;
-			if (board[0][knight[knightNum].y + y][knight[knightNum].x + x] == 1) damage++;
+	for (int y = 0; y < knight[O.first].h; y++) {
+		for (int x = 0; x < knight[O.first].w; x++) {
+			board[1][knight[O.first].y + y][knight[O.first].x + x] = O.first;
+			if (board[0][knight[O.first].y + y][knight[O.first].x + x] == 1) damage++;
 		}
 	}
-	knight[knightNum].k -= damage;
-	if (knight[knightNum].k <= 0) {
-		for (int y = 0; y < knight[knightNum].h; y++) {
-			for (int x = 0; x < knight[knightNum].w; x++) {
-				board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
+	knight[O.first].k -= damage;
+	if (knight[O.first].k <= 0) {
+		for (int y = 0; y < knight[O.first].h; y++) {
+			for (int x = 0; x < knight[O.first].w; x++) {
+				board[1][knight[O.first].y + y][knight[O.first].x + x] = 0;
 			}
 		}
 	}
-	return true;
+	return { knightNum, dir };
 }
 
 void move(int k) {
+	pair<int, int> O;
 	bool flag = false;
 	int knightNum = order[k][0];
 	int knightDir = order[k][1];
@@ -127,7 +130,32 @@ void move(int k) {
 			int ny = tmp.y + y + dy[knightDir];
 			if (!canMove(nx, ny)) flag = true;
 			if (board[1][ny][nx] > 0 && board[1][ny][nx] != knightNum) {
-				if (!interaction(nx, ny, knightDir)) flag = true;
+				O = interaction(nx, ny, knightDir);
+				if (O == make_pair(-1, -1)) flag = true;
+				else {
+					for (int y = 0; y < knight[O.first].h; y++) {
+						for (int x = 0; x < knight[O.first].w; x++) {
+							board[1][knight[O.first].y + y][knight[O.first].x + x] = 0;
+						}
+					}
+					knight[O.first].x += dx[O.second];
+					knight[O.first].y += dy[O.second];
+					int damage = 0;
+					for (int y = 0; y < knight[O.first].h; y++) {
+						for (int x = 0; x < knight[O.first].w; x++) {
+							board[1][knight[O.first].y + y][knight[O.first].x + x] = O.first;
+							if (board[0][knight[O.first].y + y][knight[O.first].x + x] == 1) damage++;
+						}
+					}
+					knight[O.first].k -= damage;
+					if (knight[O.first].k <= 0) {
+						for (int y = 0; y < knight[O.first].h; y++) {
+							for (int x = 0; x < knight[O.first].w; x++) {
+								board[1][knight[O.first].y + y][knight[O.first].x + x] = 0;
+							}
+						}
+					}
+				}
 			}
 		}
 	}

@@ -82,7 +82,10 @@ bool interaction(int nx, int ny, int dir) {
 		for (int x = 0; x < tmp.w; x++) {
 			int nx = tmp.x + x + dx[dir];
 			int ny = tmp.y + y + dy[dir];
-			if (!canMove(nx, ny)) flag = true;
+			if (!canMove(nx, ny)) {
+				isMove = false;
+				return false;
+			}
 			if (board[1][ny][nx] > 0 && board[1][ny][nx] != knightNum) {
 				if (!interaction(nx, ny, dir)) flag = true;
 			}
@@ -108,7 +111,10 @@ void move(int k) {
 		for (int x = 0; x < tmp.w; x++) {
 			int nx = tmp.x + x + dx[knightDir];
 			int ny = tmp.y + y + dy[knightDir];
-			if (!canMove(nx, ny)) flag = true;
+			if (!canMove(nx, ny)) {
+				isMove = false;
+				return;
+			}
 			if (board[1][ny][nx] > 0 && board[1][ny][nx] != knightNum) {
 				if (!interaction(nx, ny, knightDir)) flag = true;
 			}

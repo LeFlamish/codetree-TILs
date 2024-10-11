@@ -86,6 +86,18 @@ void findSquare() {
 			Hy = man[m].y;
 			MinD = dist;
 		}
+		else if (MinD == dist) {
+			if (Hy > man[m].y) {
+				Hx = man[m].x;
+				Hy = man[m].y;
+			}
+			else if (Hy == man[m].y) {
+				if (Hx > man[m].x) {
+					Hx = man[m].x;
+					Hy = man[m].y;
+				}
+			}
+		}
 	}
 	
 	for (int y = 1; y <= N; y++) {

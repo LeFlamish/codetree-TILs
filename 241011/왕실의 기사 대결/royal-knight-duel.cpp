@@ -16,6 +16,8 @@ Knight knight[31];
 int order[100][2];
 int dx[] = { 0, 1, 0, -1 };
 int dy[] = { -1, 0, 1, 0 };
+queue<pair<int, int>> seq;
+bool isMove;
 
 void check(int q) {
 	cout << "====================\n";
@@ -26,18 +28,13 @@ void check(int q) {
 	else cout << "왼쪽";
 	cout << "으로 이동시킨 후\n";
 	cout << "--------------------\n";
-	cout << "함정과 벽\n";
 	for (int y = 1; y <= L; y++) {
 		for (int x = 1; x <= L; x++) {
-			cout << board[0][y][x] << ' ';
-		}
-		cout << '\n';
-	}
-	cout << "--------------------\n";
-	cout << "기사들\n";
-	for (int y = 1; y <= L; y++) {
-		for (int x = 1; x <= L; x++) {
-			cout << board[1][y][x] << ' ';
+			if (board[0][y][x] == 2) {
+				cout << " 벽";
+				continue;
+			}
+			cout << setw(2) << board[1][y][x] << ' ';
 		}
 		cout << '\n';
 	}
@@ -76,8 +73,7 @@ bool canMove(int nx, int ny) {
 	return true;
 }
 
-pair<int, int> interaction(int nx, int ny, int dir) {
-	pair<int, int> O;
+bool interaction(int nx, int ny, int dir) {
 	bool flag = false;
 	int knightNum = board[1][ny][nx];
 	Knight tmp = knight[knightNum];
@@ -87,39 +83,43 @@ pair<int, int> interaction(int nx, int ny, int dir) {
 			int ny = tmp.y + y + dy[dir];
 			if (!canMove(nx, ny)) flag = true;
 			if (board[1][ny][nx] > 0 && board[1][ny][nx] != knightNum) {
-				O = interaction(nx, ny, dir);
-				if (O == make_pair(-1, -1)) flag = true;
+				if (!interaction(nx, ny, dir)) flag = true;
 			}
 		}
 	}
-	if (flag) return { -1, -1 };
-	for (int y = 0; y < knight[O.first].h; y++) {
-		for (int x = 0; x < knight[O.first].w; x++) {
-			board[1][knight[O.first].y + y][knight[O.first].x + x] = 0;
+	if (flag) {
+		isMove = false;
+		return false;
+	}
+	seq.push({ knightNum, dir });
+	return true;
+	/*
+	for (int y = 0; y < knight[knightNum].h; y++) {
+		for (int x = 0; x < knight[knightNum].w; x++) {
+			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
 		}
 	}
-	knight[O.first].x += dx[dir];
-	knight[O.first].y += dy[dir];
+	knight[knightNum].x += dx[dir];
+	knight[knightNum].y += dy[dir];
 	int damage = 0;
-	for (int y = 0; y < knight[O.first].h; y++) {
-		for (int x = 0; x < knight[O.first].w; x++) {
-			board[1][knight[O.first].y + y][knight[O.first].x + x] = O.first;
-			if (board[0][knight[O.first].y + y][knight[O.first].x + x] == 1) damage++;
+	for (int y = 0; y < knight[knightNum].h; y++) {
+		for (int x = 0; x < knight[knightNum].w; x++) {
+			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = knightNum;
+			if (board[0][knight[knightNum].y + y][knight[knightNum].x + x] == 1) damage++;
 		}
 	}
-	knight[O.first].k -= damage;
-	if (knight[O.first].k <= 0) {
-		for (int y = 0; y < knight[O.first].h; y++) {
-			for (int x = 0; x < knight[O.first].w; x++) {
-				board[1][knight[O.first].y + y][knight[O.first].x + x] = 0;
+	knight[knightNum].k -= damage;
+	if (knight[knightNum].k <= 0) {
+		for (int y = 0; y < knight[knightNum].h; y++) {
+			for (int x = 0; x < knight[knightNum].w; x++) {
+				board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
 			}
 		}
 	}
-	return { knightNum, dir };
+	*/
 }
 
 void move(int k) {
-	pair<int, int> O;
 	bool flag = false;
 	int knightNum = order[k][0];
 	int knightDir = order[k][1];
@@ -130,36 +130,16 @@ void move(int k) {
 			int ny = tmp.y + y + dy[knightDir];
 			if (!canMove(nx, ny)) flag = true;
 			if (board[1][ny][nx] > 0 && board[1][ny][nx] != knightNum) {
-				O = interaction(nx, ny, knightDir);
-				if (O == make_pair(-1, -1)) flag = true;
-				else {
-					for (int y = 0; y < knight[O.first].h; y++) {
-						for (int x = 0; x < knight[O.first].w; x++) {
-							board[1][knight[O.first].y + y][knight[O.first].x + x] = 0;
-						}
-					}
-					knight[O.first].x += dx[O.second];
-					knight[O.first].y += dy[O.second];
-					int damage = 0;
-					for (int y = 0; y < knight[O.first].h; y++) {
-						for (int x = 0; x < knight[O.first].w; x++) {
-							board[1][knight[O.first].y + y][knight[O.first].x + x] = O.first;
-							if (board[0][knight[O.first].y + y][knight[O.first].x + x] == 1) damage++;
-						}
-					}
-					knight[O.first].k -= damage;
-					if (knight[O.first].k <= 0) {
-						for (int y = 0; y < knight[O.first].h; y++) {
-							for (int x = 0; x < knight[O.first].w; x++) {
-								board[1][knight[O.first].y + y][knight[O.first].x + x] = 0;
-							}
-						}
-					}
-				}
+				if (!interaction(nx, ny, knightDir)) flag = true;
 			}
 		}
 	}
-	if (flag) return;
+	if (flag) {
+		isMove = false;
+		return;
+	}
+	seq.push({ knightNum, knightDir });
+	/*
 	for (int y = 0; y < knight[knightNum].h; y++) {
 		for (int x = 0; x < knight[knightNum].w; x++) {
 			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
@@ -178,16 +158,51 @@ void move(int k) {
 			}
 		}
 	}
+	*/
+}
+
+void solve() {
+	for (int q = 0; q < Q; q++) {
+		isMove = true;
+		move(q);
+		if (isMove) {
+			while (!seq.empty()) {
+				int knightNum = seq.front().first;
+				int dir = seq.front().second;
+				seq.pop();
+				for (int y = 0; y < knight[knightNum].h; y++) {
+					for (int x = 0; x < knight[knightNum].w; x++) {
+						board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
+					}
+				}
+				knight[knightNum].x += dx[dir];
+				knight[knightNum].y += dy[dir];
+				int damage = 0;
+				for (int y = 0; y < knight[knightNum].h; y++) {
+					for (int x = 0; x < knight[knightNum].w; x++) {
+						board[1][knight[knightNum].y + y][knight[knightNum].x + x] = knightNum;
+						if (board[0][knight[knightNum].y + y][knight[knightNum].x + x] == 1) damage++;
+					}
+				}
+				if (knightNum == order[q][0]) continue;
+				knight[knightNum].k -= damage;
+				if (knight[knightNum].k <= 0) {
+					for (int y = 0; y < knight[knightNum].h; y++) {
+						for (int x = 0; x < knight[knightNum].w; x++) {
+							board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
+						}
+					}
+				}
+			}
+		}
+		//check(q);
+	}
 }
 
 int main() {
 	cin.tie(0)->sync_with_stdio(0);
 	init();
-	//check(-1);
-	for (int q = 0; q < Q; q++) {
-		move(q);
-		//check(q);
-	}
+	solve();
 	for (int n = 1; n <= N; n++) {
 		if (knight[n].k > 0) ret += origin[n] - knight[n].k;
 	}

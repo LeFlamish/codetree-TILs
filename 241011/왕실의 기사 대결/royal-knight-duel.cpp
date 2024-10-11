@@ -18,6 +18,7 @@ int dx[] = { 0, 1, 0, -1 };
 int dy[] = { -1, 0, 1, 0 };
 queue<pair<int, int>> seq;
 bool isMove;
+bool visited[31];
 
 void check(int q) {
 	cout << "====================\n";
@@ -91,32 +92,11 @@ bool interaction(int nx, int ny, int dir) {
 		isMove = false;
 		return false;
 	}
-	seq.push({ knightNum, dir });
+	if (!visited[knightNum]) {
+		visited[knightNum] = true;
+		seq.push({ knightNum, dir });
+	}
 	return true;
-	/*
-	for (int y = 0; y < knight[knightNum].h; y++) {
-		for (int x = 0; x < knight[knightNum].w; x++) {
-			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
-		}
-	}
-	knight[knightNum].x += dx[dir];
-	knight[knightNum].y += dy[dir];
-	int damage = 0;
-	for (int y = 0; y < knight[knightNum].h; y++) {
-		for (int x = 0; x < knight[knightNum].w; x++) {
-			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = knightNum;
-			if (board[0][knight[knightNum].y + y][knight[knightNum].x + x] == 1) damage++;
-		}
-	}
-	knight[knightNum].k -= damage;
-	if (knight[knightNum].k <= 0) {
-		for (int y = 0; y < knight[knightNum].h; y++) {
-			for (int x = 0; x < knight[knightNum].w; x++) {
-				board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
-			}
-		}
-	}
-	*/
 }
 
 void move(int k) {
@@ -138,31 +118,16 @@ void move(int k) {
 		isMove = false;
 		return;
 	}
-	seq.push({ knightNum, knightDir });
-	/*
-	for (int y = 0; y < knight[knightNum].h; y++) {
-		for (int x = 0; x < knight[knightNum].w; x++) {
-			board[1][knight[knightNum].y + y][knight[knightNum].x + x] = 0;
-		}
+	if (!visited[knightNum]) {
+		visited[knightNum] = true;
+		seq.push({ knightNum, knightDir });
 	}
-	knight[knightNum].x += dx[knightDir];
-	knight[knightNum].y += dy[knightDir];
-	if (board[1][knight[knightNum].y][knight[knightNum].x] > 0 && board[1][knight[knightNum].y][knight[knightNum].x] != knightNum) {
-		knight[knightNum].x -= dx[knightDir];
-		knight[knightNum].y -= dy[knightDir];
-	}
-	else {
-		for (int y = 0; y < knight[knightNum].h; y++) {
-			for (int x = 0; x < knight[knightNum].w; x++) {
-				board[1][knight[knightNum].y + y][knight[knightNum].x + x] = knightNum;
-			}
-		}
-	}
-	*/
 }
 
 void solve() {
+	//check(-1);
 	for (int q = 0; q < Q; q++) {
+		memset(visited, false, sizeof(visited));
 		isMove = true;
 		move(q);
 		if (isMove) {

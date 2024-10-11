@@ -160,6 +160,9 @@ void solve() {
 				}
 			}
 		}
+		while (!seq.empty()) {
+			seq.pop();
+		}
 		//check(q);
 	}
 }

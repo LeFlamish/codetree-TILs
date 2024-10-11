@@ -79,6 +79,7 @@ void findSquare() {
 				bool findRunner = false, findExit = false;
 				for (int i = 0; i < size; i++) {
 					for (int j = 0; j < size; j++) {
+						if (x + size - 1 > N || y + size - 1 > N) continue;
 						if (exitX == x + j && exitY == y + i) findExit = true;
 						if (isHuman[y + i][x + j]) findRunner = true;
 					}

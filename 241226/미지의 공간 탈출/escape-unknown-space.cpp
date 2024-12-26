@@ -238,11 +238,14 @@ void solve() {
 	int turn = 0;
 	while (!Q.empty()) {
 		moveAnomaly(turn);
-		if (moveHuman()) break;
+		if (moveHuman()) {
+			cout << turn;
+			return;
+		}
 		//check(turn);
 		turn++;
 	}
-	cout << turn;
+	cout << -1;
 }
 
 int main() {

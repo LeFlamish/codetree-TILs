@@ -235,14 +235,14 @@ bool moveHuman() {
 }
 
 void solve() {
-	int turn = 0;
+	int turn = 1;
 	while (!Q.empty()) {
 		moveAnomaly(turn);
 		if (moveHuman()) {
-			cout << turn;
+			cout << turn - 1;
 			return;
 		}
-		//check(turn);
+		// check(turn);
 		turn++;
 	}
 	cout << -1;

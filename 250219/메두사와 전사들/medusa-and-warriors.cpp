@@ -51,6 +51,11 @@ void check(int dir) {
 	for (int y = 0; y < N; y++) {
 		for (int x = 0; x < N; x++) {
 			bool flag = false;
+			if (MDS.x == x && MDS.y == y) {
+				cout << " M ";
+				flag = true;
+				continue;
+			}
 			for (int m = 0; m < M; m++) {
 				if (W[m].x == x && W[m].y == y && !W[m].isDie) {
 					cout << " W ";
@@ -260,6 +265,7 @@ void moveWarrior() {
 		for (int i = 0; i < 2; i++) {
 			int bestX = cx, bestY = cy, curD = distance(cx, cy);
 			for (int dir = 0; dir < 4; dir++) {
+				if (i) dir = (dir + 2) % 4;
 				int nx = cx + dx[dir], ny = cy + dy[dir];
 				if (OOB(nx, ny) || cnt[MDS.dir][ny][nx] == -2) continue;
 				if (distance(nx, ny) < curD) {
@@ -270,7 +276,10 @@ void moveWarrior() {
 			if (bestX == cx && bestY == cy) break;
 			cx = bestX, cy = bestY;
 			totalD++;
-			if (cx == MDS.x && cy == MDS.y) attackMedusa(m);
+			if (cx == MDS.x && cy == MDS.y) {
+				attackMedusa(m);
+				break;
+			}
 		}
 		W[m].x = cx, W[m].y = cy;
 	}
@@ -283,9 +292,7 @@ inline void resetStone() {
 }
 
 void solve() {
-	if (findMedusaRoad()) {
-		makeMedusaRoad();
-	}
+	if (findMedusaRoad()) makeMedusaRoad();
 	else {
 		cout << -1;
 		return;
@@ -298,9 +305,11 @@ void solve() {
 		makeStone();
 		moveWarrior();
 		resetStone();
+		//check(MDS.dir);
 		cout << totalD << ' ' << stone << ' ' << attacker << '\n';
 	}
 	cout << 0;
+	return;
 }
 
 int main() {

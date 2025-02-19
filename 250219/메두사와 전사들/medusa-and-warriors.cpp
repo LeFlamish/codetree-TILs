@@ -265,8 +265,10 @@ void moveWarrior() {
 		for (int i = 0; i < 2; i++) {
 			int bestX = cx, bestY = cy, curD = distance(cx, cy);
 			for (int dir = 0; dir < 4; dir++) {
-				if (i) dir = (dir + 2) % 4;
 				int nx = cx + dx[dir], ny = cy + dy[dir];
+				if (i) {
+					nx = cx + dx[(dir + 2) % 4], ny = cy + dy[(dir + 2) % 4];
+				}
 				if (OOB(nx, ny) || cnt[MDS.dir][ny][nx] == -2) continue;
 				if (distance(nx, ny) < curD) {
 					curD = distance(nx, ny);
